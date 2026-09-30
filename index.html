@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ボディメイク メニューメーカー｜研究にもとづく全身の筋トレ8週間メニューを自動作成</title>
+<meta name="description" content="週の回数と環境を選ぶだけで、全身の見た目をバランスよく変える筋トレの8週間メニューを自動で作成。種目・セット数・回数・休憩時間まで、筋肥大の研究にもとづいて組み立てます。ジムでも自宅でも使えます。無料・登録不要。">
+<link rel="canonical" href="https://yuno-lab.com/body-menu/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ボディメイク メニューメーカー">
+<meta property="og:description" content="研究にもとづいて、全身の見た目を変える筋トレの8週間メニューを自動で作ります。">
+<meta property="og:url" content="https://yuno-lab.com/body-menu/">
+<meta property="og:image" content="https://yuno-lab.com/body-menu/og.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#d9480f">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ボディメイク メニューメーカー",
+  "url": "https://yuno-lab.com/body-menu/",
+  "description": "週の回数と環境を選ぶだけで、全身の見た目をバランスよく変える筋トレの8週間メニューを自動で作成するWebツール。",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "All",
+  "inLanguage": "ja",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" }
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7280043806672538"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+
+<nav class="topnav" aria-label="サイト内">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="favicon.svg" alt="" width="26" height="26">ボディメイク メニューメーカー</a>
+    <ul>
+      <li><a class="navlink" href="index.html" aria-current="page">メニュー作成</a></li>
+      <li><a class="navlink" href="evidence.html">研究のまとめ</a></li>
+      <li><a class="navlink" href="/">yuno-lab</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="site-header">
+  <div class="wrap">
+    <p class="eyebrow">無料・登録不要</p>
+    <h1>ボディメイク メニューメーカー</h1>
+    <p class="lead">全身の見た目をバランスよく変える、筋トレの8週間メニューを自動で作ります。種目、セット数、回数、休憩時間まで、筋肉を大きくする研究にもとづいて組み立てます。MAX の入力や重さの計算は必要ありません。</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="card" id="form-section" aria-labelledby="form-title">
+    <h2 id="form-title"><span class="step-num">1</span>あなたの条件</h2>
+    <form id="menu-form" novalidate>
+      <fieldset>
+        <legend>レベル</legend>
+        <div class="seg">
+          <label><input type="radio" name="level" value="beginner" checked><span>初心者<small>筋トレ歴1年未満</small></span></label>
+          <label><input type="radio" name="level" value="intermediate"><span>中級者<small>1年以上続けている</small></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>週に何回トレーニングしますか</legend>
+        <div class="seg seg-compact">
+          <label><input type="radio" name="freq" value="2"><span>週2回</span></label>
+          <label><input type="radio" name="freq" value="3" checked><span>週3回</span></label>
+          <label><input type="radio" name="freq" value="4"><span>週4回</span></label>
+          <label><input type="radio" name="freq" value="5"><span>週5回</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>トレーニングする場所</legend>
+        <div class="seg">
+          <label><input type="radio" name="env" value="gym" checked><span>ジム<small>マシンやケーブルが使える</small></span></label>
+          <label><input type="radio" name="env" value="home"><span>自宅<small>ダンベルと角度を変えられるベンチ</small></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>特に鍛えたいところ</legend>
+        <div class="seg">
+          <label><input type="radio" name="focus" value="balance" checked><span>全身をバランスよく</span></label>
+          <label><input type="radio" name="focus" value="upper"><span>上半身<small>胸・背中・肩・腕</small></span></label>
+          <label><input type="radio" name="focus" value="lower"><span>下半身<small>お尻・脚</small></span></label>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="primary">メニューを作る</button>
+    </form>
+  </section>
+
+  <section id="result" aria-labelledby="result-title" hidden>
+    <div class="card">
+      <h2 id="result-title"><span class="step-num">2</span>あなたの8週間メニュー</h2>
+      <p class="summary-meta" id="summary-meta"></p>
+
+      <h3 class="section-title">1週間に各部位を鍛えるセット数</h3>
+      <div class="table-wrap">
+        <table class="sets-table" id="sets-table">
+          <thead><tr><th scope="col">部位</th><th scope="col">このメニュー</th><th scope="col">目標</th><th scope="col" aria-label="目標に対する割合"></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="hint" id="sets-note"></p>
+
+      <div class="rules">
+        <p><strong>重さの決め方：</strong>指定の回数の範囲で、「余力」の数だけ回数を残して終われる重さを選びます。例えば「8〜12回・余力あと2回」なら、あと2回できるところで10回前後になる重さです。</p>
+        <p><strong>重さの上げ方：</strong>全部のセットで回数の上限に届いたら、次の回から重さを少し上げます。バーベルは2.5kg、ダンベルは1〜2kgが目安です。上げたら、回数は下限からやり直します。</p>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="secondary" id="share-btn">このメニューのリンクをコピー</button>
+        <button type="button" class="secondary" id="print-btn">印刷する</button>
+      </div>
+      <div class="share-box" id="share-box" hidden>
+        <input type="text" id="share-url" readonly aria-label="共有リンク">
+        <p class="share-status" id="share-status" role="status"></p>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="週を選ぶ" id="week-tabs"></div>
+    <div id="week-panels"></div>
+    <p class="warmup-note">最初の種目の前に、軽い重さで2〜3セットのウォームアップをしてください。痛みが出た種目は中止して、別の種目に替えてください。</p>
+  </section>
+
+  <section class="card article" aria-labelledby="rules-title">
+    <h2 id="rules-title">このメニューの考え方</h2>
+    <p>筋肉を大きくする研究で、効果があると報告されている考え方を組み合わせています。くわしい研究の内容は<a href="evidence.html">研究のまとめ</a>で紹介しています。</p>
+    <ol>
+      <li><strong>週のセット数を積み上げます。</strong>週のセット数が多いほど筋肉は増えやすくなりますが、増やすほど上乗せは小さくなります。初心者は少なめから始めます。</li>
+      <li><strong>同じ部位を週2回以上に分けます。</strong>週の合計セット数が同じなら、回数による差は小さいとされています。分けるのは、1回の時間を抑えながら週の合計を積み上げるためです。</li>
+      <li><strong>回数の範囲は広めにとります。</strong>限界の近くまで行えば、重さを軽くして回数を多くしても、同じくらい筋肉が増えると報告されています。</li>
+      <li><strong>限界の少し手前で止めます。</strong>限界の近くまで行うことは大切ですが、毎回限界まで追い込む必要はありません。</li>
+      <li><strong>休憩をしっかりとります。</strong>休憩は60秒より長いほうが、わずかに有利な可能性があります。複数の関節を使う種目は2〜3分、1つの関節の種目は1〜2分を目安にしています。</li>
+      <li><strong>筋肉が伸びた位置で負荷がかかる種目を入れます。</strong>腕を頭の上に上げて行う二の腕の種目や、座って行うレッグカールは、比べた種目より大きく発達したと報告されています。</li>
+      <li><strong>少しずつ負荷を上げ、途中で軽め週を入れます。</strong>重さを増やしても回数を増やしても、筋肉の増え方は同じくらいでした。5週目はセット数を半分にして疲れを抜きます。</li>
+    </ol>
+
+    <h2>よくある質問</h2>
+    <h3>BIG3 メニューメーカーとの違いは？</h3>
+    <p><a href="/big3-menu/">BIG3 メニューメーカー</a>は、スクワット・ベンチプレス・デッドリフトの重量を伸ばすことが目的です。こちらは、全身の筋肉をバランスよく大きくして、見た目を変えることが目的です。</p>
+    <h3>見た目を変えるには、筋トレだけで十分ですか？</h3>
+    <p>筋トレに加えて、食事が大切です。たんぱく質は、体重1kgあたり1日1.6gくらいで効果が頭打ちになりやすいと報告されています。個人差があるため、多めに2.2gくらいを目安にする考え方もあります。体脂肪を減らしたい場合は、食べる量の調整も必要です。</p>
+    <h3>週の回数は多いほど効果がありますか？</h3>
+    <p>週の合計セット数が同じなら、回数による差は小さいとされています。自分が続けやすい回数を選んでください。</p>
+    <h3>週2回や週3回だと、目標のセット数に届かないのはなぜですか？</h3>
+    <p>1回のトレーニングが長くなりすぎないように、上限を設けているためです。目標に近づけたい場合は、週の回数を増やしてください。</p>
+    <h3>種目を変えてもいいですか？</h3>
+    <p>同じ部位を鍛える種目なら、替えて構いません。ジムの混み具合や、体に合うかどうかで選んでください。</p>
+    <h3>8週間が終わったら？</h3>
+    <p>1週目からもう一度始めます。8週間前より重い重さでできるようになっているはずです。慣れてきたら、レベルを中級者にしたり、週の回数を増やしたりしてください。</p>
+
+    <h2 id="disclaimer">免責事項</h2>
+    <div class="disclaimer">
+      <p>このツールのメニューは一般的な情報です。個人の体調やケガの経歴は考慮していません。持病がある方や体調に不安がある方は、医師に相談してから始めてください。</p>
+      <p>トレーニングは自己責任で行ってください。このツールの利用によって生じたケガや損害について、運営者は責任を負いません。</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <a href="/">yuno-lab トップ</a>
+    <span aria-hidden="true">・</span>
+    <a href="evidence.html">研究のまとめ</a>
+    <span aria-hidden="true">・</span>
+    <a href="/about.html">このサイトについて</a>
+    <span aria-hidden="true">・</span>
+    <a href="/privacy.html">プライバシーポリシー</a>
+    <span aria-hidden="true">・</span>
+    <a href="#disclaimer">免責事項</a>
+  </div>
+</footer>
+
+<script src="js/body-data.js"></script>
+<script src="js/body-program.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

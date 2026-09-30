@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ボディメイク メニューメーカー ロジックのテスト</title>
+<style>
+  body { font-family: system-ui, "Yu Gothic UI", Meiryo, sans-serif; margin: 16px; line-height: 1.6; background: #fff; color: #1a1d21; }
+  #summary { font-size: 1.25rem; font-weight: 700; }
+  .pass { color: #2b8a3e; }
+  .fail { color: #c92a2a; font-weight: 700; }
+</style>
+</head>
+<body>
+<h1>ロジックのテスト</h1>
+<p id="summary">実行中…</p>
+<ul id="results"></ul>
+
+<script src="js/body-data.js"></script>
+<script src="js/body-program.js"></script>
+<script>
+(function () {
+  'use strict';
+  const B = window.Body;
+  const D = B.DATA;
+  const results = [];
+  function test(name, fn) {
+    try { fn(); results.push({ name, ok: true }); }
+    catch (e) { results.push({ name, ok: false, msg: e && e.message ? e.message : String(e) }); }
+  }
+  function eq(a, b, label) {
+    const x = JSON.stringify(a), y = JSON.stringify(b);
+    if (x !== y) throw new Error((label ? label + ': ' : '') + '期待値 ' + y + ' / 実際 ' + x);
+  }
+  function ok(c, label) { if (!c) throw new Error(label || '条件を満たしていません'); }
+
+  const ALL = [];
+  ['beginner', 'intermediate'].forEach(level => [2, 3, 4, 5].forEach(freq => ['gym', 'home'].forEach(env =>
+    ['balance', 'upper', 'lower'].forEach(focus => ALL.push({ level, freq, env, focus })))));
+  const label = c => c.level + '/週' + c.freq + '/' + c.env + '/' + c.focus;
+
+  // ---- 入力 ----
+  test('不正な入力は既定値に直す', () => {
+    eq(B.normalizeInput({ level: 'x', freq: 9, env: 'moon', focus: '?' }), { level: 'beginner', freq: 3, env: 'gym', focus: 'balance' });
+  });
+
+  // ---- 目標セット数 ----
+  test('バランス型は基本の目標セット数のまま', () => eq(B.weeklyTargets('beginner', 'balance'), D.targets.beginner));
+  test('上半身重視: 上半身を増やし、下半身を減らす', () => {
+    const t = B.weeklyTargets('beginner', 'upper');
+    eq([t.chest, t.back, t.biceps, t.quads, t.hams, t.calves, t.abs], [12, 14, 8, 7, 5, 5, 4]);
+  });
+  test('下半身重視: 下半身を増やし、上半身を減らす', () => {
+    const t = B.weeklyTargets('intermediate', 'lower');
+    eq([t.quads, t.glutes, t.chest, t.biceps, t.abs], [16, 12, 10, 7, 6]);
+  });
+  test('重点以外でも最低4セットは残す', () => {
+    ALL.forEach(c => { const t = B.weeklyTargets(c.level, c.focus); D.muscleOrder.forEach(m => ok(t[m] >= 4, label(c) + ' ' + m)); });
+  });
+
+  // ---- 部品 ----
+  test('1回の上限を超えたら多い種目から減らす', () => {
+    const s = B.capSession([4, 4, 4, 4, 4, 4, 4], 18, 2);
+    eq(s.reduce((a, b) => a + b, 0), 18);
+    ok(s.every(x => x >= 2 && x <= 4));
+  });
+  test('上限以下ならそのまま', () => eq(B.capSession([3, 2, 3], 18, 2), [3, 2, 3]));
+  test('重点部位は後回しにして減らす', () => eq(B.capSession([5, 5, 5, 5], 16, 2, [true, false, true, false]), [5, 3, 5, 3]));
+  test('候補がすべて使用済みなら null', () => eq(B.chooseExercise(['calf_raise'], 0, new Set(['calf_raise'])), null));
+  test('追加の種目は同じ部位の直後に入る', () => {
+    const d = B.generateBodyProgram({ level: 'beginner', freq: 2, env: 'gym', focus: 'upper' }).weeks[1].days[0];
+    eq(d.exercises.map(e => e.id), ['squat', 'bench_press', 'cable_fly', 'lat_pulldown', 'rdl', 'lateral_raise', 'db_shoulder_press', 'cable_overhead_ext', 'cable_crunch']);
+  });
+  test('同じ日の同じ種目は避ける', () => {
+    const used = new Set(['bulgarian']);
+    eq(B.chooseExercise(['goblet_squat', 'bulgarian'], 1, used), 'goblet_squat');
+  });
+
+  // ---- 全48通りの組み合わせ ----
+  test('全組み合わせで8週間・週の回数どおりの日数', () => {
+    ALL.forEach(c => {
+      const p = B.generateBodyProgram(c);
+      eq(p.weeks.length, 8, label(c));
+      p.weeks.forEach(w => eq(w.days.length, c.freq, label(c) + ' 第' + w.week + '週'));
+    });
+  });
+  test('種目はすべて説明つきで、環境に合ったものだけ', () => {
+    ALL.forEach(c => B.generateBodyProgram(c).weeks[0].days.forEach(d => d.exercises.forEach(e => {
+      ok(D.exercises[e.id], label(c) + ' 未定義の種目 ' + e.id);
+      ok(D.lists[c.env][e.muscle].indexOf(e.id) >= 0, label(c) + ' 環境に合わない種目 ' + e.id);
+    })));
+  });
+  test('同じ日に同じ種目が2回出てこない', () => {
+    ALL.forEach(c => B.generateBodyProgram(c).weeks[0].days.forEach(d => {
+      const ids = d.exercises.map(e => e.id);
+      eq(new Set(ids).size, ids.length, label(c) + ' ' + d.name);
+    }));
+  });
+  test('全部位が毎週どこかで鍛えられる', () => {
+    ALL.forEach(c => { const p = B.generateBodyProgram(c); D.muscleOrder.forEach(m => ok(p.weeklySets[m] > 0, label(c) + ' ' + m)); });
+  });
+  test('週3回以上なら大きな部位は週2日以上', () => {
+    ALL.filter(c => c.freq >= 3).forEach(c => {
+      const days = B.generateBodyProgram(c).weeks[1].days;
+      ['chest', 'back', 'shoulders', 'quads', 'hams', 'glutes'].forEach(m => {
+        const n = days.filter(d => d.exercises.some(e => e.muscle === m)).length;
+        ok(n >= 2, label(c) + ' ' + m + ' は週' + n + '日');
+      });
+    });
+  });
+  test('セット数は通常週2〜上限、軽め週は1以上', () => {
+    ALL.forEach(c => B.generateBodyProgram(c).weeks.forEach(w => w.days.forEach(d => d.exercises.forEach(e => {
+      const max = D.slotMax[c.level];
+      if (w.deload) ok(e.sets >= 1 && e.sets <= max, label(c) + ' 第' + w.week + '週 ' + e.sets);
+      else ok(e.sets >= 2 && e.sets <= max, label(c) + ' 第' + w.week + '週 ' + e.sets);
+    }))));
+  });
+  test('基本の週（2週目）は1回の合計セット数が上限以内', () => {
+    ALL.forEach(c => B.generateBodyProgram(c).weeks[1].days.forEach(d => {
+      const total = d.exercises.reduce((a, e) => a + e.sets, 0);
+      const group = D.focusGroups[c.focus];
+      const hasFocus = d.exercises.some(e => group.indexOf(e.muscle) >= 0);
+      const cap = D.sessionMax[c.level] + (hasFocus ? D.focusSessionBonus[c.level] : 0);
+      ok(total <= cap, label(c) + ' ' + d.name + ' ' + total + 'セット / 上限' + cap);
+    }));
+  });
+  test('軽め週は基本の週よりセット数が少ない', () => {
+    ALL.forEach(c => {
+      const p = B.generateBodyProgram(c);
+      const sum = w => w.days.reduce((a, d) => a + d.exercises.reduce((b, e) => b + e.sets, 0), 0);
+      ok(sum(p.weeks[4]) < sum(p.weeks[1]), label(c));
+    });
+  });
+  test('余力は複関節と単関節で週ごとの設定どおり', () => {
+    const p = B.generateBodyProgram({ level: 'beginner', freq: 3, env: 'gym', focus: 'balance' });
+    p.weeks.forEach((w, i) => w.days.forEach(d => d.exercises.forEach(e => {
+      eq(e.rir, e.type === 'main' ? D.weeks[i].rirMain : D.weeks[i].rirIso, '第' + w.week + '週 ' + e.name);
+    })));
+  });
+  test('重点部位は、全組み合わせで重点なしより週のセット数が多い', () => {
+    ALL.filter(c => c.focus !== 'balance').forEach(c => {
+      const group = D.focusGroups[c.focus];
+      const sum = ws => group.reduce((a, m) => a + ws[m], 0);
+      const focused = B.generateBodyProgram(c).weeklySets;
+      const balanced = B.generateBodyProgram({ ...c, focus: 'balance' }).weeklySets;
+      ok(sum(focused) > sum(balanced), label(c) + ' 重点 ' + sum(focused) + ' / バランス ' + sum(balanced));
+    });
+  });
+  test('重点以外の部位は、重点なしより多くならない', () => {
+    ALL.filter(c => c.focus !== 'balance').forEach(c => {
+      const group = D.focusGroups[c.focus];
+      const others = D.muscleOrder.filter(m => group.indexOf(m) < 0 && m !== 'abs');
+      const sum = ws => others.reduce((a, m) => a + ws[m], 0);
+      ok(sum(B.generateBodyProgram(c).weeklySets) <= sum(B.generateBodyProgram({ ...c, focus: 'balance' }).weeklySets), label(c));
+    });
+  });
+  test('所要時間は5分刻みで、現実的な範囲', () => {
+    ALL.forEach(c => B.generateBodyProgram(c).weeks.forEach(w => w.days.forEach(d => {
+      ok(d.minutes % 5 === 0 && d.minutes >= 15 && d.minutes <= 95, label(c) + ' 第' + w.week + '週 ' + d.name + ' ' + d.minutes + '分');
+    })));
+  });
+  test('自宅の週5回の脚の日: ブルガリアンとゴブレットが重ならず並ぶ', () => {
+    const d = B.generateBodyProgram({ level: 'beginner', freq: 5, env: 'home', focus: 'balance' }).weeks[1].days[4];
+    eq(d.exercises.map(e => e.id), ['bulgarian', 'goblet_squat', 'single_leg_rdl', 'db_calf_raise']);
+  });
+
+  const ul = document.getElementById('results');
+  results.forEach(r => {
+    const li = document.createElement('li');
+    li.className = r.ok ? 'pass' : 'fail';
+    li.textContent = (r.ok ? 'PASS ' : 'FAIL ') + r.name + (r.msg ? '：' + r.msg : '');
+    ul.appendChild(li);
+  });
+  const failed = results.filter(r => !r.ok).length;
+  const s = document.getElementById('summary');
+  s.textContent = failed ? 'FAIL：' + results.length + '件中 ' + failed + '件失敗' : 'ALL PASS：' + results.length + '件';
+  s.className = failed ? 'fail' : 'pass';
+})();
+</script>
+</body>
+</html>
