@@ -146,7 +146,7 @@
         e.long ? h('span', { class: 'badge badge-long', text: '伸ばして効かせる' }) : null
       ),
       h('div', { class: 'ex-load' },
-        h('span', { class: 'ex-sets-big', text: e.sets + 'セット × ' + e.reps + '回' })
+        h('span', { class: 'ex-sets-big', text: String(e.reps).replace(/^([0-9〜]+)/, '$1rep') + ' ' + e.sets + 'set' })
       ),
       h('div', { class: 'ex-meta' },
         h('span', { text: '余力 ' + rirText(e.rir) }),
