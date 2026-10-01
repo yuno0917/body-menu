@@ -142,8 +142,7 @@
     return h('li', { class: 'ex ' + (e.type === 'main' ? 'ex-main' : 'ex-iso') },
       h('div', { class: 'ex-top' },
         h('span', { class: 'ex-name', text: e.name }),
-        h('span', { class: 'badge badge-part', text: e.muscleName }),
-        e.long ? h('span', { class: 'badge badge-long', text: '伸ばして効かせる' }) : null
+        h('span', { class: 'ex-part', text: e.muscleName })
       ),
       h('div', { class: 'ex-load' },
         h('span', { class: 'ex-sets-big', text: String(e.reps).replace(/^([0-9〜]+)/, '$1rep') + ' ' + e.sets + 'set' })
@@ -196,7 +195,7 @@
         onclick: () => selectWeek(i, false)
       },
       h('span', { text: w.week + '週' }),
-      h('span', { class: 'tab-tag', text: w.deload ? '軽め' : ' ' }))
+      w.deload ? h('span', { class: 'tab-tag', text: '軽め' }) : null)
     ));
     panelsEl.replaceChildren(...p.weeks.map(renderWeek));
   }

@@ -47,22 +47,21 @@
 
 <header class="site-header">
   <div class="wrap">
-    <p class="eyebrow">無料・登録不要</p>
     <h1>ボディメイク メニューメーカー</h1>
-    <p class="lead">全身の見た目をバランスよく変える、筋トレの8週間メニューを自動で作ります。種目、セット数、回数、休憩時間まで、筋肉を大きくする研究にもとづいて組み立てます。MAX の入力や重さの計算は必要ありません。</p>
+    <p class="lead">週の回数と場所を選ぶだけで、全身の見た目を変える筋トレの8週間メニューを作ります。</p>
   </div>
 </header>
 
 <main class="wrap">
 
   <section class="card" id="form-section" aria-labelledby="form-title">
-    <h2 id="form-title"><span class="step-num">1</span>あなたの条件</h2>
+    <h2 id="form-title">あなたの条件</h2>
     <form id="menu-form" novalidate>
       <fieldset>
         <legend>レベル</legend>
         <div class="seg">
-          <label><input type="radio" name="level" value="beginner" checked><span>初心者<small>筋トレ歴1年未満</small></span></label>
-          <label><input type="radio" name="level" value="intermediate"><span>中級者<small>1年以上続けている</small></span></label>
+          <label><input type="radio" name="level" value="beginner" checked><span>初心者</span></label>
+          <label><input type="radio" name="level" value="intermediate"><span>中級者</span></label>
         </div>
       </fieldset>
 
@@ -79,8 +78,8 @@
       <fieldset>
         <legend>トレーニングする場所</legend>
         <div class="seg">
-          <label><input type="radio" name="env" value="gym" checked><span>ジム<small>マシンやケーブルが使える</small></span></label>
-          <label><input type="radio" name="env" value="home"><span>自宅<small>ダンベルと角度を変えられるベンチ</small></span></label>
+          <label><input type="radio" name="env" value="gym" checked><span>ジム</span></label>
+          <label><input type="radio" name="env" value="home"><span>自宅（ダンベルとベンチ）</span></label>
         </div>
       </fieldset>
 
@@ -88,8 +87,8 @@
         <legend>特に鍛えたいところ</legend>
         <div class="seg">
           <label><input type="radio" name="focus" value="balance" checked><span>全身をバランスよく</span></label>
-          <label><input type="radio" name="focus" value="upper"><span>上半身<small>胸・背中・肩・腕</small></span></label>
-          <label><input type="radio" name="focus" value="lower"><span>下半身<small>お尻・脚</small></span></label>
+          <label><input type="radio" name="focus" value="upper"><span>上半身</span></label>
+          <label><input type="radio" name="focus" value="lower"><span>下半身</span></label>
         </div>
       </fieldset>
 
@@ -99,26 +98,27 @@
 
   <section id="result" aria-labelledby="result-title" hidden>
     <div class="card">
-      <h2 id="result-title"><span class="step-num">2</span>あなたの8週間メニュー</h2>
+      <h2 id="result-title">あなたの8週間メニュー</h2>
       <p class="summary-meta" id="summary-meta"></p>
 
-      <h3 class="section-title">1週間に各部位を鍛えるセット数</h3>
-      <div class="table-wrap">
-        <table class="sets-table" id="sets-table">
-          <thead><tr><th scope="col">部位</th><th scope="col">このメニュー</th><th scope="col">目標</th><th scope="col" aria-label="目標に対する割合"></th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <p class="hint" id="sets-note"></p>
-
-      <div class="rules">
-        <p><strong>重さの決め方：</strong>指定の回数の範囲で、「余力」の数だけ回数を残して終われる重さを選びます。例えば「8〜12rep・余力あと2回」なら、あと2回できるところで10回前後になる重さです。</p>
-        <p><strong>重さの上げ方：</strong>全部のセットで回数の上限に届いたら、次の回から重さを少し上げます。バーベルは2.5kg、ダンベルは1〜2kgが目安です。上げたら、回数は下限からやり直します。</p>
-      </div>
-
+      <ul class="rules">
+        <li>重さは、指定の回数の範囲で「余力」の数だけ回数を残して終われる重さにします。「8〜12rep・余力あと2回」なら、あと2回できるところで10回前後になる重さです。</li>
+        <li>全部のセットで回数の上限に届いたら、次の回から少し重くします（バーベルは2.5kg、ダンベルは1〜2kg）。重くしたら、回数は下限からやり直します。</li>
+        <li>最初の種目の前に、軽い重さで2〜3セットのウォームアップをします。痛みが出た種目は中止して、別の種目に替えてください。</li>
+      </ul>
+      <details class="more">
+        <summary>部位ごとの週のセット数を見る</summary>
+        <div class="table-wrap">
+          <table class="sets-table" id="sets-table">
+            <thead><tr><th scope="col">部位</th><th scope="col">このメニュー</th><th scope="col">目標</th><th scope="col" aria-label="目標に対する割合"></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="hint" id="sets-note"></p>
+      </details>
       <div class="actions">
-        <button type="button" class="secondary" id="share-btn">このメニューのリンクをコピー</button>
-        <button type="button" class="secondary" id="print-btn">印刷する</button>
+        <button type="button" class="secondary" id="share-btn">リンクをコピー</button>
+        <button type="button" class="secondary" id="print-btn">印刷</button>
       </div>
       <div class="share-box" id="share-box" hidden>
         <input type="text" id="share-url" readonly aria-label="共有リンク">
@@ -128,7 +128,6 @@
 
     <div class="tabs" role="tablist" aria-label="週を選ぶ" id="week-tabs"></div>
     <div id="week-panels"></div>
-    <p class="warmup-note">最初の種目の前に、軽い重さで2〜3セットのウォームアップをしてください。痛みが出た種目は中止して、別の種目に替えてください。</p>
   </section>
 
   <section class="card article" aria-labelledby="rules-title">
@@ -145,18 +144,14 @@
     </ol>
 
     <h2>よくある質問</h2>
-    <h3>BIG3 メニューメーカーとの違いは？</h3>
-    <p><a href="/big3-menu/">BIG3 メニューメーカー</a>は、スクワット・ベンチプレス・デッドリフトの重量を伸ばすことが目的です。こちらは、全身の筋肉をバランスよく大きくして、見た目を変えることが目的です。</p>
-    <h3>見た目を変えるには、筋トレだけで十分ですか？</h3>
-    <p>筋トレに加えて、食事が大切です。たんぱく質は、体重1kgあたり1日1.6gくらいで効果が頭打ちになりやすいと報告されています。個人差があるため、多めに2.2gくらいを目安にする考え方もあります。体脂肪を減らしたい場合は、食べる量の調整も必要です。</p>
-    <h3>週の回数は多いほど効果がありますか？</h3>
-    <p>週の合計セット数が同じなら、回数による差は小さいとされています。自分が続けやすい回数を選んでください。</p>
-    <h3>週2回や週3回だと、目標のセット数に届かないのはなぜですか？</h3>
-    <p>1回のトレーニングが長くなりすぎないように、上限を設けているためです。目標に近づけたい場合は、週の回数を増やしてください。</p>
-    <h3>種目を変えてもいいですか？</h3>
-    <p>同じ部位を鍛える種目なら、替えて構いません。ジムの混み具合や、体に合うかどうかで選んでください。</p>
-    <h3>8週間が終わったら？</h3>
-    <p>1週目からもう一度始めます。8週間前より重い重さでできるようになっているはずです。慣れてきたら、レベルを中級者にしたり、週の回数を増やしたりしてください。</p>
+    <div class="faq">
+      <details><summary>BIG3 メニューメーカーとの違いは？</summary><p><a href="/big3-menu/">BIG3 メニューメーカー</a>は、スクワット・ベンチプレス・デッドリフトの重量を伸ばすことが目的です。こちらは、全身の筋肉をバランスよく大きくして、見た目を変えることが目的です。</p></details>
+      <details><summary>見た目を変えるには、筋トレだけで十分ですか？</summary><p>筋トレに加えて、食事が大切です。たんぱく質は、体重1kgあたり1日1.6gくらいで効果が頭打ちになりやすいと報告されています。個人差があるため、多めに2.2gくらいを目安にする考え方もあります。体脂肪を減らしたい場合は、食べる量の調整も必要です。</p></details>
+      <details><summary>週の回数は多いほど効果がありますか？</summary><p>週の合計セット数が同じなら、回数による差は小さいとされています。自分が続けやすい回数を選んでください。</p></details>
+      <details><summary>週2回や週3回だと、目標のセット数に届かないのはなぜですか？</summary><p>1回のトレーニングが長くなりすぎないように、上限を設けているためです。目標に近づけたい場合は、週の回数を増やしてください。</p></details>
+      <details><summary>種目を変えてもいいですか？</summary><p>同じ部位を鍛える種目なら、替えて構いません。ジムの混み具合や、体に合うかどうかで選んでください。</p></details>
+      <details><summary>8週間が終わったら？</summary><p>1週目からもう一度始めます。8週間前より重い重さでできるようになっているはずです。慣れてきたら、レベルを中級者にしたり、週の回数を増やしたりしてください。</p></details>
+    </div>
 
     <h2 id="disclaimer">免責事項</h2>
     <div class="disclaimer">
